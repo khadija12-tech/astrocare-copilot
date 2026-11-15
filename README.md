@@ -1,10 +1,10 @@
 # AstroCare Copilot
 
 ## Live links (fill in after publishing)
-- Full app (Streamlit Community Cloud): TODO https://YOUR-APP.streamlit.app
-- VR habitat: https://USERNAME.github.io/REPO/vr/
-- Mobile app: https://USERNAME.github.io/REPO/mobile/
-- Landing page: https://USERNAME.github.io/REPO/
+- Full app (Streamlit Community Cloud): https://astrocare-copilot-neus8cerqkh83r6pkm3jak.streamlit.app/
+- VR habitat: https://khadija12-tech.github.io/astrocare-copilot/vr/
+- Mobile app: https://khadija12-tech.github.io/astrocare-copilot/mobile/
+- Landing page: https://khadija12-tech.github.io/astrocare-copilot/
 
 Offline health copilot for astronauts on deep-space missions. It learns each astronaut's **personal baseline**, detects drift early,
 **explains** every alert, recommends actions, tracks **crew dynamics**, analyses **voice** stress, projects a **30-day digital twin**,

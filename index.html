@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AstroCare Copilot</title>
+<!-- AI-assisted code (generated with Claude, reviewed by the team). Demo data is SIMULATED. -->
+<style>
+:root{--bg:#060b1a;--card:#0e1730;--tx:#e6edf7;--mut:#8fa3c4;--ac:#38bdf8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,sans-serif}
+main{max-width:720px;margin:auto;padding:32px 20px}h1{margin:.2rem 0;font-size:2rem}p{color:var(--mut)}
+.g{display:grid;gap:12px;margin-top:24px}.c{display:block;background:var(--card);border:1px solid #1e2a4a;border-radius:12px;padding:16px;color:var(--tx);text-decoration:none}
+.c:hover{border-color:var(--ac)}.c b{display:block;font-size:1.1rem;color:var(--ac)}.c span{color:var(--mut);font-size:.92rem}
+small{display:block;margin-top:28px;color:var(--mut)}
+</style></head><body><main>
+<h1>AstroCare Copilot</h1>
+<p>An offline health copilot for astronauts: personal baselines, early drift detection, explainable alerts and guidance. Built for the NASA Space Apps Challenge 2026.</p>
+<div class="g">
+  <a class="c" href="vr/"><b>VR habitat</b><span>Crew health in a 3D habitat. Works in a desktop browser, on a phone, or in a WebXR headset.</span></a>
+  <a class="c" href="mobile/"><b>Mobile check-in app</b><span>30-second check-in and daily routine. Works offline once opened; add it to the home screen.</span></a>
+  <a class="c" id="app" hidden target="_blank" rel="noopener"><b>Full app (Streamlit)</b><span>All modules: self-check, drift engine, crew dynamics, voice, 30-day twin, Earth link, real NASA data.</span></a>
+  <a class="c" id="repo" hidden target="_blank" rel="noopener"><b>Source code</b><span>README, submission text and the real NASA dataset used (OSD-575).</span></a>
+</div>
+<small>Demo crew data is simulated. This is decision support, not a medical diagnosis.</small>
+</main>
+<script>
+const STREAMLIT_URL = "";   // paste your https://....streamlit.app link here after deploying
+if (STREAMLIT_URL) { const a = document.getElementById("app"); a.href = STREAMLIT_URL; a.hidden = false; }
+if (location.hostname.endsWith(".github.io")) {
+  const user = location.hostname.split(".")[0], repo = location.pathname.split("/")[1];
+  if (repo) { const r = document.getElementById("repo"); r.href = "https://github.com/" + user + "/" + repo; r.hidden = false; }
+}
+</script></body></html>

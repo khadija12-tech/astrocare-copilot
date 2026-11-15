@@ -1,0 +1,5 @@
+NASA Open Science Data Repository (OSDR), study OSD-575
+"SpaceX Inspiration4 Blood Serum Metabolic Panel and Immune/Cardiac Cytokine Arrays (Comprehensive Metabolic Panel and Multiplex)"
+ALSDA ID: LSDS-8   DOI: 10.26030/mc5d-p710   Licence: CC0 1.0
+File: OSD-575_LSDS-8_CMP_TRANSFORMED.csv (original name: LSDS-8_Comprehensive_Metabolic_Panel_CMP_TRANSFORMED.csv), unmodified.
+Serum comprehensive metabolic panel run by Quest Diagnostics. Crew codes C001-C004 are NASA's de-identified codes.

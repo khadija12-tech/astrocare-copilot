@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#060b1a"><title>AstroCare Crew</title>
+<!-- AI-assisted code (generated with Claude, reviewed by the team). Data is SIMULATED. Works offline once opened. -->
+<script src="data.js"></script>
+<style>
+:root{--bg:#060b1a;--card:#0e1730;--tx:#e6edf7;--mut:#8fa3c4;--ok:#22c55e;--wa:#f59e0b;--bad:#ef4444;--ac:#38bdf8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,sans-serif;padding:16px;max-width:520px;margin:auto}
+h1{font-size:1.3rem;margin:.2rem 0}p.s{color:var(--mut);margin:.2rem 0 1rem;font-size:.9rem}
+select,button{font:inherit;padding:10px;border-radius:8px;border:1px solid #1e2a4a;background:var(--card);color:var(--tx);width:100%}
+button.p{background:var(--ac);color:#06101f;border:0;font-weight:700;margin-top:10px}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.t{background:var(--card);border-radius:10px;padding:12px;border-left:6px solid var(--ok)}
+.t b{font-size:1.5rem;display:block}.card{background:var(--card);border-radius:10px;padding:12px;margin:12px 0}
+label{display:block;margin:10px 0 2px}input[type=range]{width:100%}small{color:var(--mut)}pre{white-space:pre-wrap;font-size:.75rem;color:var(--mut)}
+</style></head><body>
+<h1>AstroCare Crew</h1><p class="s">30-second check-in. Everything stays on this device.</p>
+<select id="who"></select>
+<div class="g" id="tiles"></div>
+<div class="card"><b id="hl"></b><ul id="dr"></ul></div>
+<div class="card"><b>Check-in</b>
+ <label>Mood <output id="mo">7</output>/10</label><input id="m" type="range" min="0" max="10" value="7">
+ <label>Fatigue <output id="fo">3</output>/10</label><input id="f" type="range" min="0" max="10" value="3">
+ <label>Tension <output id="to">3</output>/10</label><input id="t" type="range" min="0" max="10" value="3">
+ <button class="p" id="save">Save check-in</button><small id="msg"></small></div>
+<div class="card"><b>Today's routine</b><div id="tasks"></div><small id="pts"></small></div>
+<div class="card"><b>Summary for Earth</b><br><small>Compact packet, sent when the link is available.</small><pre id="pk"></pre><button id="cp">Copy packet</button></div>
+<script>
+const D=ASTRO,$=i=>document.getElementById(i),col=s=>s>=75?"var(--ok)":s>=50?"var(--wa)":"var(--bad)",names=Object.keys(D.crew);
+names.forEach(n=>$("who").add(new Option(n,n)));
+const key=()=>"astrocare:"+$("who").value, load=()=>JSON.parse(localStorage.getItem(key())||"[]");
+function render(){
+  const c=D.crew[$("who").value],last=D.days-1;
+  $("tiles").innerHTML=D.labels.map((l,k)=>`<div class="t" style="border-color:${col(c.scores[last][k])}"><small>${l}</small><b>${c.scores[last][k]}</b></div>`).join("");
+  $("hl").textContent=c.headline;$("dr").innerHTML=c.drivers.map(x=>`<li>${x}</li>`).join("");
+  const ci=load(),pri=Math.min(...c.scores[last])<40?"URGENT":Math.min(...c.scores[last])<75?"WATCH":"ROUTINE";
+  $("pk").textContent=JSON.stringify({crew:$("who").value,day:D.days,priority:pri,scores:Object.fromEntries(D.systems.map((s,k)=>[s,c.scores[last][k]])),checkins:ci.slice(-3)});
+}
+for(const [i,o] of [["m","mo"],["f","fo"],["t","to"]])$(i).oninput=e=>$(o).textContent=e.target.value;
+$("who").onchange=render;
+$("save").onclick=()=>{try{const a=load();a.push({ts:Date.now(),mood:+$("m").value,fatigue:+$("f").value,tension:+$("t").value});localStorage.setItem(key(),JSON.stringify(a));$("msg").textContent="Saved on this device."}catch(e){$("msg").textContent="Storage unavailable."}render()};
+$("cp").onclick=()=>navigator.clipboard&&navigator.clipboard.writeText($("pk").textContent);
+const TASKS=[["checkin","30-second check-in"],["pulse","Resting pulse"],["dosimeter","Read the radiation dosimeter"],["exercise","Exercise session"],["sleep","Review last night's sleep"],["meal","Share a meal or call with a crewmate"]];
+const tk=()=>"astrocare:tasks:"+$("who").value, ld=()=>{try{return JSON.parse(localStorage.getItem(tk())||"[]")}catch(e){return[]}};
+function renderTasks(){const d=ld();$("tasks").innerHTML=TASKS.map(([id,t])=>`<label><input type="checkbox" data-id="${id}" ${d.includes(id)?"checked":""}> ${t}</label>`).join("");
+  $("pts").textContent=d.length*10+" points today. No penalties for missed tasks.";
+  document.querySelectorAll("#tasks input").forEach(i=>i.onchange=()=>{const a=ld().filter(x=>x!==i.dataset.id);if(i.checked)a.push(i.dataset.id);try{localStorage.setItem(tk(),JSON.stringify(a))}catch(e){}renderTasks()})}
+$("who").addEventListener("change",renderTasks);renderTasks();
+render();
+if("serviceWorker"in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("sw.js");
+</script></body></html>

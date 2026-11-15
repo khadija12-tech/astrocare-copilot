@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AstroCare Habitat (VR)</title>
+<!-- AI-assisted code (generated with Claude, reviewed by the team). Data is SIMULATED. -->
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+<script src="data.js"></script>
+<style>
+  body{margin:0;font-family:system-ui,sans-serif}
+  #ui{position:fixed;left:0;right:0;bottom:0;padding:12px 16px;background:rgba(6,11,26,.82);color:#e6edf7;display:flex;gap:12px;align-items:center;z-index:9}
+  #ui input{flex:1}#ui button{padding:8px 14px;border:0;border-radius:6px;background:#38bdf8;color:#06101f;font-weight:600}
+  #ui span{min-width:92px}
+</style></head>
+<body>
+<a-scene renderer="antialias:true" background="color:#060b1a">
+  <a-entity camera look-controls wasd-controls position="0 1.6 0"></a-entity>
+  <a-circle radius="7" rotation="-90 0 0" color="#0f172a"></a-circle>
+  <a-ring radius-inner="3.5" radius-outer="3.55" rotation="-90 0 0" position="0 .01 0" color="#38bdf8"></a-ring>
+  <a-sphere position="0 3.4 -7" radius="0.9" color="#1d4ed8" material="roughness:.9"></a-sphere>
+  <a-text id="earth" value="Earth: ground team, delay 20 min each way" position="0 2.2 -7" align="center" width="5" color="#9fb6d6"></a-text>
+  <a-text id="dayTxt" value="" position="0 3.1 -3.4" align="center" width="4" color="#e6edf7"></a-text>
+  <a-text value="Look around. Press the headset button for VR. Space = pause." position="0 0.6 -2.5" align="center" width="2.4" color="#64748b"></a-text>
+  <a-entity id="crew"></a-entity>
+  <a-entity id="stars"></a-entity>
+</a-scene>
+<div id="ui"><button id="play">Pause</button><input id="sl" type="range" min="0" value="0"><span id="dl"></span></div>
+<script>
+const D=window.ASTRO, names=Object.keys(D.crew), col=s=>s>=75?"#22c55e":s>=50?"#f59e0b":"#ef4444", $=id=>document.getElementById(id);
+document.getElementById("earth").setAttribute("value","Earth: ground team, delay "+D.delay+" min each way");
+const mk=(tag,attrs,parent)=>{const e=document.createElement(tag);for(const k in attrs)e.setAttribute(k,attrs[k]);parent.appendChild(e);return e};
+const refs={};
+names.forEach((n,i)=>{
+  const a=(-60+i*(120/(names.length-1)))*Math.PI/180, p=mk("a-entity",{position:`${3.1*Math.sin(a)} 1.6 ${-3.1*Math.cos(a)}`,rotation:`0 ${a*180/Math.PI} 0`},$("crew"));
+  mk("a-plane",{width:1.7,height:2.0,color:"#0b1226",opacity:.9},p);
+  mk("a-text",{value:n,position:"-0.75 0.88 0.01",width:3,color:"#e6edf7"},p);
+  refs[n]={ov:mk("a-text",{value:"",position:"0.75 0.88 0.01",width:3,align:"right",color:"#e6edf7"},p),rows:[]};
+  D.systems.forEach((s,k)=>{
+    const y=0.52-k*0.27;
+    const dot=mk("a-sphere",{radius:.09,position:`-0.65 ${y} 0.02`},p);
+    mk("a-text",{value:D.labels[k],position:`-0.5 ${y} 0.01`,width:2,color:"#9fb6d6"},p);
+    const v=mk("a-text",{value:"",position:`0.75 ${y} 0.01`,width:2.2,align:"right",color:"#e6edf7"},p);
+    refs[n].rows.push([dot,v]);
+  });
+});
+for(let i=0;i<160;i++){const r=25,t=Math.random()*6.28,u=Math.random()*1.4-.2;mk("a-sphere",{radius:.04,color:"#cbd5e1",position:`${r*Math.cos(t)*Math.cos(u)} ${r*Math.sin(u)+4} ${r*Math.sin(t)*Math.cos(u)}`},$("stars"))}
+function show(d){
+  $("dayTxt").setAttribute("value","Mission day "+(d+1));$("sl").value=d;$("dl").textContent="Day "+(d+1);
+  names.forEach(n=>{const c=D.crew[n];refs[n].ov.setAttribute("value","overall "+c.overall[d]);refs[n].ov.setAttribute("color",col(c.overall[d]));
+    c.scores[d].forEach((s,k)=>{refs[n].rows[k][0].setAttribute("color",col(s));refs[n].rows[k][1].setAttribute("value",s)})});
+}
+let d=0,playing=true;$("sl").max=D.days-1;
+const tick=()=>{if(playing){d=(d+1)%D.days;show(d)}};setInterval(tick,700);show(0);
+$("play").onclick=()=>{playing=!playing;$("play").textContent=playing?"Pause":"Play"};
+$("sl").oninput=e=>{d=+e.target.value;show(d)};
+addEventListener("keydown",e=>{if(e.code==="Space")$("play").click()});
+</script></body></html>

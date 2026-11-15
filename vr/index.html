@@ -15,10 +15,10 @@
   <a-entity camera look-controls wasd-controls position="0 1.6 0"></a-entity>
   <a-circle radius="7" rotation="-90 0 0" color="#0f172a"></a-circle>
   <a-ring radius-inner="3.5" radius-outer="3.55" rotation="-90 0 0" position="0 .01 0" color="#38bdf8"></a-ring>
-  <a-sphere position="0 3.4 -7" radius="0.9" color="#1d4ed8" material="roughness:.9"></a-sphere>
-  <a-text id="earth" value="Earth: ground team, delay 20 min each way" position="0 2.2 -7" align="center" width="5" color="#9fb6d6"></a-text>
+  <a-sphere position="0 4.4 -7" radius="0.9" color="#1d4ed8" material="roughness:.9"></a-sphere>
+  <a-text id="earth" value="Earth: ground team, delay 20 min each way" position="0 5.5 -7" align="center" width="5" color="#9fb6d6"></a-text>
   <a-text id="dayTxt" value="" position="0 3.1 -3.4" align="center" width="4" color="#e6edf7"></a-text>
-  <a-text value="Look around. Press the headset button for VR. Space = pause." position="0 0.6 -2.5" align="center" width="2.4" color="#64748b"></a-text>
+  <a-text value="Look around. Press the headset button for VR. Space = pause." position="0 0.2 -2.2" align="center" width="2.4" color="#64748b"></a-text>
   <a-entity id="crew"></a-entity>
   <a-entity id="stars"></a-entity>
 </a-scene>
@@ -29,7 +29,7 @@ document.getElementById("earth").setAttribute("value","Earth: ground team, delay
 const mk=(tag,attrs,parent)=>{const e=document.createElement(tag);for(const k in attrs)e.setAttribute(k,attrs[k]);parent.appendChild(e);return e};
 const refs={};
 names.forEach((n,i)=>{
-  const a=(-60+i*(120/(names.length-1)))*Math.PI/180, p=mk("a-entity",{position:`${3.1*Math.sin(a)} 1.6 ${-3.1*Math.cos(a)}`,rotation:`0 ${a*180/Math.PI} 0`},$("crew"));
+  const a=(-60+i*(120/(names.length-1)))*Math.PI/180, p=mk("a-entity",{position:`${3.1*Math.sin(a)} 1.6 ${-3.1*Math.cos(a)}`,rotation:`0 ${-a*180/Math.PI} 0`},$("crew"));
   mk("a-plane",{width:1.7,height:2.0,color:"#0b1226",opacity:.9},p);
   mk("a-text",{value:n,position:"-0.75 0.88 0.01",width:3,color:"#e6edf7"},p);
   refs[n]={ov:mk("a-text",{value:"",position:"0.75 0.88 0.01",width:3,align:"right",color:"#e6edf7"},p),rows:[]};
